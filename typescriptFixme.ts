@@ -2,6 +2,7 @@
 var isDone = false;
 var lines = 42;
 var name = "Anders";
+export {};
 
 // annotate the type as when it's not known
 let unknownTypeVariable;
@@ -47,6 +48,7 @@ var mySearch = function (src, sub) {
 //annotate the constructor arguments and properties
 class Point {
   x = 0;
+  y;
   constructor(x, y = 0) {
     this.x = x;
     this.y = y;
@@ -58,6 +60,7 @@ class Point {
 
 // annotate `PointPerson` to use all properties of `Person` and then add the missing required property
 class PointPerson {
+  name;
   constructor(name) {
     this.name = name;
   }
@@ -66,8 +69,10 @@ class PointPerson {
 // Inheritance
 // Make `Point3D` inherit from `Point`
 // Don't forget to call the parent constructor
-class Point3D {
+class Point3D extends Point {
+  z;
   constructor(x, y, z = 0) {
+    super(x,y);
     this.z = z;
   }
   dist() {
@@ -78,7 +83,10 @@ class Point3D {
 
 // Make `Tuple` Generic that it accepts to generic types as arguments
 
-class Tuple {
+class Tuple <type1, type2>{
+  item1 :  type1;
+  item2 : type2;
+
   constructor(item1, item2) {
     this.item1 = item1;
     this.item2 = item2;
@@ -86,6 +94,11 @@ class Tuple {
 }
 
 // create a generic interface called Pair that accepts one generic type for two properties named item1 and item2
+
+interface Pair<T> {
+  item1: T;
+  item2: T;
+}
 
 // create a function that will take a pair with a generic argument and return a `Tuple`
 function pairToTuple(pair) {
@@ -96,9 +109,9 @@ var tuple = pairToTuple({ item1: "hello", item2: "world" });
 
 // annotate `make`, `model`, and `year` to be not mutable (read only) outside the constructor
 class Car {
-  make;
-  model;
-  year = 2018;
+  readonly make;
+  readonly model;
+  readonly year = 2018;
 
   constructor() {
     this.make = "Unknown Make";
@@ -107,9 +120,13 @@ class Car {
 }
 
 // annotate this array
-var arrayOfAnyType = [1, "string", false];
+var arrayOfAnyType :(number|string|boolean)[] = [1, "string", false];
 
 // fix the foo object so bar and baz can be added
-let foo = {};
+let foo = {} as {
+  bar : number;
+  baz : string;
+};
+
 foo.bar = 123;
 foo.baz = "hello world";
